@@ -14,7 +14,7 @@ key = os.environ.get("key")
 secret = os.environ.get("secret")
 
 
-latest_img = None
+latest_img = Image.objects.all().last()
 
 
 @csrf_exempt
