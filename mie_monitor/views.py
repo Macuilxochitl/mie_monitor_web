@@ -19,12 +19,10 @@ latest_img = None
 
 @csrf_exempt
 def index(request):
-    print(request.FILES)
     return HttpResponse("Hello, world.")
 
 
 def get_latest_img(request):
-    print(dir(latest_img.img))
     global latest_img
     if not latest_img:
         return HttpResponse("")
@@ -54,5 +52,4 @@ def upload(request):
     global latest_img
     latest_img = image
     image.save()
-    time.sleep(5)
     return JsonResponse({'msg': 'upload done.'})
