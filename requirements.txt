@@ -1,2 +1,3 @@
 Pillow
 Django
+django-cors-headers
