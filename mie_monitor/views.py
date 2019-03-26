@@ -60,6 +60,12 @@ def get_latest_img(request):
                          'img_url': host + latest_img.img.url})
 
 
+def get_alert_setting(request):
+    global enable_alert, person_threshold
+    return JsonResponse({'enable_alert': enable_alert,
+                         'person_threshold': person_threshold})
+
+
 def get_latest_face_detect_img(request):
     global latest_img
     if not latest_img:
@@ -105,8 +111,6 @@ def upload(request):
     image.save()
     if len(image.body_detect_result) > person_threshold:
         alert()
-        print("alert!")
-    time.sleep(5)
     return JsonResponse({'msg': 'upload done.'})
 
 
@@ -114,5 +118,18 @@ def alert():
     global latest_send_email_time, person_threshold, enable_alert
     if not latest_send_email_time or time.time() - latest_send_email_time > 60 and enable_alert:
         print("send email.")
-        send_mail('智能监控系统 ———— 报警', '智能监控系统侦测到有{0}人以上出现，请注意.'.format(person_threshold), EMAIL_HOST_USER, ['admin@yitu.yt'], fail_silently=False)
+        send_mail('智能监控系统 ———— 报警', '智能监控系统侦测到有{0}人以上出现，请注意.'.format(person_threshold), EMAIL_HOST_USER, ['admin@yitu.yt', '307535705@qq.com', '852917283@qq.com'], fail_silently=False)
         latest_send_email_time = time.time()
+
+
+def statistics(request):
+    img = Image.objects.all()
+    count = 0
+    max_num = 0
+    for i in img:
+        num = len(eval(i.body_detect_result))
+        count += num
+        if num > max_num:
+            max_num = num
+    avg = count / len(img)
+    return JsonResponse({'mon_data': {'avg': round(avg, 2), 'count': count, 'max': max_num}})

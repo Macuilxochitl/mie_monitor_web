@@ -44,5 +44,5 @@ class Image(models.Model):
             cv2.imwrite(tmp_path, tmp_img)
             face['face_img_url'] = host + '/' + tmp_path
             faces_set.append(face)
-
+        print(faces_set)
         return faces_set
