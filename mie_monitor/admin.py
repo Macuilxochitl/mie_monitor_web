@@ -3,7 +3,7 @@ from .models import Image
 from django.contrib import admin
 from django.contrib.auth.models import Group
 
-admin.site.site_header = 'Monitor administration'
+admin.site.site_header = '人体检测智能系统后台管理系统'
 
 # Register your models here.
 
