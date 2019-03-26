@@ -127,7 +127,10 @@ def statistics(request):
     count = 0
     max_num = 0
     for i in img:
-        num = len(eval(i.body_detect_result))
+        try:
+            num = len(eval(i.body_detect_result))
+        except Exception as e:
+            continue
         count += num
         if num > max_num:
             max_num = num
