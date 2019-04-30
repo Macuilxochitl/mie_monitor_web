@@ -82,7 +82,6 @@ def get_latest_body_detect_img(request):
     if not latest_img:
         return HttpResponse("")
     latest_img.rect_body()
-    time.sleep(2)
     return JsonResponse({'face_detect_result': latest_img.face_detect_result,
                          'body_detect_result': latest_img.body_detect_result,
                          'img_url': host + latest_img.rect_body_img.url})
@@ -109,7 +108,7 @@ def upload(request):
     global latest_img
     latest_img = image
     image.save()
-    if len(image.body_detect_result) > person_threshold:
+    if len(image.body_detect_result) >= person_threshold:
         alert()
     return JsonResponse({'msg': 'upload done.'})
 
