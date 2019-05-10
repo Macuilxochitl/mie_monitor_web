@@ -71,11 +71,27 @@ def get_latest_face_detect_img(request):
     if not latest_img:
         return HttpResponse("")
     faces_set = latest_img.get_face_set()
+    for i in faces_set:
+        i['attributes']['emotion'] = get_emotion(i['attributes']['emotion'])
     return JsonResponse({'face_detect_result': latest_img.face_detect_result,
                          'body_detect_result': latest_img.body_detect_result,
                          'img_url': host + latest_img.img.url,
                          'faces': faces_set})
 
+
+def get_emotion(emotion_dict):
+    emotion = [None, 0]
+    print(emotion_dict)
+    for i in emotion_dict:
+        if emotion_dict[i] > emotion[1]:
+            emotion = [i, emotion_dict[i]]
+    print(emotion)
+    emotion[0] = get_emotion_chinese(emotion[0])
+    return emotion[0]
+
+def get_emotion_chinese(emotion):
+    c_dict = {'disgust':'反感', 'surprise':'惊讶', 'fear':'害怕', 'anger':'愤怒', 'happiness':'愉快', 'sadness':'悲伤', 'neutral':'自然'}
+    return c_dict[emotion]
 
 def get_latest_body_detect_img(request):
     global latest_img
